@@ -1,5 +1,6 @@
-import {Injectable } from '@angular/core';
-
+import {Injectable, inject } from '@angular/core';
+import { collection, collectionData, doc, setDoc, Firestore, updateDoc, deleteDoc} from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 export interface User{
   id: string,
@@ -12,6 +13,29 @@ export interface User{
 })
 export class UserService {
 
+  private firestore = inject(Firestore);
+
+  private usersCollection = collection(this.firestore, 'users');
+
+  getusers(): Observable<User[]>{
+    return collectionData(this.usersCollection, ({idField: 'id'})) as Observable<User[]>
+  }
+
+  addUser(newUser: User){
+    const userRef = doc(this.usersCollection);
+    const newId = userRef.id;
+    newUser.id = newId;
+    setDoc(userRef, newUser);
+  }
+
+  updateUser(editUser: User){
+    const userRef = doc(this.firestore, `users/${editUser.id}`);
+    updateDoc(userRef, {...editUser});
+  }
+  deleteUser(delUser: User){
+    const userRef = doc(this.firestore, `users/${delUser.id}`);
+    deleteDoc(userRef);
+  }
   // This service is for CRUD operations on users
   // It uses AngularFire for Firestore operations
   // It uses RxJS for observables

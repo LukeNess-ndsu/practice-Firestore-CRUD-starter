@@ -24,16 +24,37 @@ export class AppComponent {
 
   // This is the array of users that will be displayed in the template
   users: User[] = []
-
+  editUserId: string | null = null
 
   // This is the hook method that will be called when the component is initialized
   ngOnInit(){
-   
+   this.userService.getusers().subscribe(data => this.users = data);
   }
 
 
   addUser(){
-    
+    this.userService.addUser(this.user);
+    this.resetForm()
   }
 
+  resetForm(){
+    this.user = {
+      id: '',
+      name: '',
+      email: ''
+    }
+    this.editUserId = null;
+  }
+  setEditUser(editUser: User){
+    this.user = {...editUser};
+    this.editUserId = editUser.id;
+  }
+  deleteUser(delUser: User){
+    this.userService.deleteUser(delUser);
+
+  }
+  updateUser(){
+    this.userService.updateUser(this.user);
+    this.resetForm();
+  }
 }

@@ -17,13 +17,23 @@
     />
   </div>
 
-  <div>
-    <button class="btn btn-outline-primary" (click)="addUser()">
-      Add User
-    </button>
-  </div>
+  @if(editUserId){
+
+  <button class="btn btn-outline-primary" (click)="updateUser()">Update</button>
+  <button class="btn btn-outline-primary" (click)="resetForm()">Reset</button>
+  } @else {
+  <button class="btn btn-outline-primary" (click)="addUser()">Add User</button>
+  }
+  <div></div>
   <hr />
   <div>
     <h2>List of Users</h2>
+    @for(user of users; track user.id){
+    <p>{{ $index + 1 }} : {{ user.id }} : {{ user.name }} : {{ user.email }}
+      <button class="btn btn-outline-primary" (click)="setEditUser(user)">Edit</button>
+      <button class="btn btn-outline-primary" (click)="deleteUser(user)">Delete</button>
+
+    </p>
+    }
   </div>
 </div>
